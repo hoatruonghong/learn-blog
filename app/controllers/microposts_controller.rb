@@ -1,9 +1,11 @@
 class MicropostsController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :set_micropost, only: %i[ show edit update destroy ]
 
   # GET /microposts or /microposts.json
   def index
     @microposts = Micropost.all
+    render json: @microposts
   end
 
   # GET /microposts/1 or /microposts/1.json
@@ -25,10 +27,10 @@ class MicropostsController < ApplicationController
 
     respond_to do |format|
       if @micropost.save
-        format.html { redirect_to micropost_url(@micropost), notice: "Micropost was successfully created." }
+        #format.html { redirect_to micropost_url(@micropost), notice: "Micropost was successfully created." }
         format.json { render :show, status: :created, location: @micropost }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        #format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @micropost.errors, status: :unprocessable_entity }
       end
     end
@@ -38,10 +40,10 @@ class MicropostsController < ApplicationController
   def update
     respond_to do |format|
       if @micropost.update(micropost_params)
-        format.html { redirect_to micropost_url(@micropost), notice: "Micropost was successfully updated." }
+        #format.html { redirect_to micropost_url(@micropost), notice: "Micropost was successfully updated." }
         format.json { render :show, status: :ok, location: @micropost }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        #format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @micropost.errors, status: :unprocessable_entity }
       end
     end
@@ -52,7 +54,7 @@ class MicropostsController < ApplicationController
     @micropost.destroy
 
     respond_to do |format|
-      format.html { redirect_to microposts_url, notice: "Micropost was successfully destroyed." }
+      format.html { redirect_to microposts_url, notice: "micropost was successfully destroyed." }
       format.json { head :no_content }
     end
   end
