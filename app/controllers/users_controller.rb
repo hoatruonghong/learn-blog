@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  skip_before_action :verify_authenticity_token
+  before_action :set_user, only: %i[ show edit update destroy show_microposts]
+  #http_basic_authenticate_with name: "admin", password: "123456"
 
   # GET /users or /users.json
   def index
@@ -47,6 +49,14 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /users/1/microposts
+  def show_microposts
+    puts params[:id]
+    @microposts = Micropost.where("user_id = ?", params[:id]).order("created_at DESC")
+    render json:@microposts
+
   end
 
   # DELETE /users/1 or /users/1.json
