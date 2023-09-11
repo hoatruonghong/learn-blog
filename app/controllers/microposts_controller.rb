@@ -53,15 +53,16 @@ class MicropostsController < ApplicationController
     File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
       file.write(uploaded_io.read)    
     end
+    
     @micropost.update(picture: "public/uploads/"+uploaded_io.original_filename)
-
     render json: {res: {status: 200, picture_path: "public/uploads/"+uploaded_io.original_filename}}
+  
   end
   
-  # # POST /microposts/1/upload-files
-  # def upload_multiple_file
+  # POST /microposts/1/upload-files
+  def upload_multiple_file
 
-  # end
+  end
   
   # PATCH/PUT /microposts/1 or /microposts/1.json
   def update
