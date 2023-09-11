@@ -54,6 +54,12 @@ class CommentsController < ApplicationController
     end
   end
 
+  def show_detail
+    puts
+    @comments = Comment.where(user_id: params[:user_id], micropost_id: params[:micropost_id]).order("created_at DESC")
+    render json:@comments
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_comment

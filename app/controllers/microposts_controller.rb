@@ -1,6 +1,12 @@
+require 'fileutils'
+
 class MicropostsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  before_action :set_micropost, only: %i[ show edit update destroy ]
+  protect_from_forgery with: :null_session
+
+  # TOKEN = "secret"
+  # skip_before_action :verify_authenticity_token
+  # before_action :authenticate, except: [:index]
+  before_action :set_micropost, only: %i[ show edit update destroy upload_multiple_file upload_single_file]
 
   # GET /microposts or /microposts.json
   def index
@@ -10,6 +16,7 @@ class MicropostsController < ApplicationController
 
   # GET /microposts/1 or /microposts/1.json
   def show
+    render json: @micropost
   end
 
   # GET /microposts/new
@@ -23,8 +30,9 @@ class MicropostsController < ApplicationController
 
   # POST /microposts or /microposts.json
   def create
-    @micropost = Micropost.new(micropost_params)
-
+    puts(params)
+    puts(micropost_params)
+    @micropost = Micropost.new(micropost_params)   
     respond_to do |format|
       if @micropost.save
         #format.html { redirect_to micropost_url(@micropost), notice: "Micropost was successfully created." }
@@ -36,6 +44,25 @@ class MicropostsController < ApplicationController
     end
   end
 
+  # POST /microposts/1/upload-file
+  def upload_single_file
+    puts(@micropost)
+    puts(params)
+    uploaded_io = params[:picture]
+    FileUtils.mkdir 'public/uploads' unless File.exist?('public/uploads')
+    File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+      file.write(uploaded_io.read)    
+    end
+    @micropost.update(picture: "public/uploads/"+uploaded_io.original_filename)
+
+    render json: {res: {status: 200, picture_path: "public/uploads/"+uploaded_io.original_filename}}
+  end
+  
+  # # POST /microposts/1/upload-files
+  # def upload_multiple_file
+
+  # end
+  
   # PATCH/PUT /microposts/1 or /microposts/1.json
   def update
     respond_to do |format|
@@ -69,4 +96,12 @@ class MicropostsController < ApplicationController
     def micropost_params
       params.require(:micropost).permit(:content, :user_id)
     end
+
+    # def authenticate
+    #   authenticate_or_request_with_http_token do |token, options|
+    #     # Compare the tokens in a time-constant manner, to mitigate
+    #     # timing attacks.
+    #     ActiveSupport::SecurityUtils.secure_compare(token, TOKEN)
+    #   end
+    # end
 end

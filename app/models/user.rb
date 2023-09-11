@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-    attr_accessor :remember_token
+    attr_accessor :remember_token, :activation_digest
 
     has_many :microposts
+    has_many :comments
     #before_save { self.email = email.downcase! } # here has a bug when input a lowcase value ??
     validates :name, presence: true
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -17,13 +18,7 @@ class User < ApplicationRecord
         BCrypt::Engine.cost
         BCrypt::Password.create(string, cost: cost)
     end
-    # def self.digest(string)
-    #     cost = ActiveModel::SecurePassword.min_cost ?
-    #     BCrypt::Engine::MIN_COST :
-    #     BCrypt::Engine.cost
-    #     BCrypt::Password.create(string, cost: cost)
-    # end
-        
+
     # Returns a random token.
     def User.new_token
         SecureRandom.urlsafe_base64

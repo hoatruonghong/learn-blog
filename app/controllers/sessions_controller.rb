@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       log_in @user
       remember @user
       puts current_user
-      render json: @user
+      render json: {data: @user[:name]}
     else 
       flash[:danger] = 'Invalid email/password combination' #Not quite right!
       render html: "invalid email or password"

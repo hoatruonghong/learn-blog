@@ -11,5 +11,8 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get "/users/:id/microposts", to: 'users#show_microposts'
+  get "/comments/:user_id/:micropost_id", to: 'comments#show_detail'
+  # post "/api/login", to: 'authentication#login'
+  post "/microposts/:id/upload-file", to: 'microposts#upload_single_file'
 
 end
