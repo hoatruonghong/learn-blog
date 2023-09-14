@@ -1,11 +1,12 @@
 class CommentsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_comment, only: %i[ show edit update destroy ]
+  expose(:comments){Comment.all}
+  expose(:comment)
 
   # GET /comments or /comments.json
   def index
-    @comments = Comment.all
-    render json:@comments
+    render json: comments
   end
 
   # GET /comments/1 or /comments/1.json

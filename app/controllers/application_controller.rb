@@ -1,22 +1,14 @@
 class ApplicationController < ActionController::Base
-    protect_from_forgery with: :null_session
-    include SessionsHelper
-    # include JsonWebToken
-    # before_action :authenticate_request, except: [:hello]
+    # protect_from_forgery with: :null_session
+    protect_from_forgery prepend: true
+    #before_action :authenticate_account!
 
     def hello
-        render html: "hello, world!"
+        if account_signed_in?
+            render json: {result: {current_account: current_account, account_session: account_session}}
+        else
+            render json: {result: "nothing"}
+        end
     end
 
-    private
-    def authenticate_request        # bug here
-        header = request.headers["Authorization"]
-        puts "check here"
-        puts request
-        if header
-            header = header.split(" ").last
-        end
-        decoded = jwt_decode(header)
-        @current_user = User.find(decoded[:user_id])
-    end    
 end

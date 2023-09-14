@@ -1,11 +1,12 @@
 class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_user, only: %i[ show edit update destroy show_microposts]
-  #http_basic_authenticate_with name: "admin", password: "123456"
 
   # GET /users or /users.json
   def index
     @users = User.all
+    # name = helpers.format_name(@users[0])
+    # puts name
     render json:@users 
   end
 

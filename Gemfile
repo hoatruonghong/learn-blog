@@ -51,6 +51,8 @@ gem "image_processing", "~> 1.2"
 
 gem 'will_paginate', '3.1.8'
 gem 'active_storage_validations'
+gem 'devise'
+gem 'decent_exposure', '~> 3.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
